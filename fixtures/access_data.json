@@ -1,0 +1,260 @@
+[
+{
+  "model": "access.role",
+  "pk": 1,
+  "fields": {
+    "title": "admin"
+  }
+},
+{
+  "model": "access.role",
+  "pk": 2,
+  "fields": {
+    "title": "manager"
+  }
+},
+{
+  "model": "access.role",
+  "pk": 3,
+  "fields": {
+    "title": "user"
+  }
+},
+{
+  "model": "access.role",
+  "pk": 4,
+  "fields": {
+    "title": "guest"
+  }
+},
+{
+  "model": "access.resource",
+  "pk": 1,
+  "fields": {
+    "title": "item"
+  }
+},
+{
+  "model": "access.resource",
+  "pk": 2,
+  "fields": {
+    "title": "order"
+  }
+},
+{
+  "model": "access.resource",
+  "pk": 3,
+  "fields": {
+    "title": "seller"
+  }
+},
+{
+  "model": "access.resource",
+  "pk": 4,
+  "fields": {
+    "title": "review"
+  }
+},
+{
+  "model": "access.resource",
+  "pk": 5,
+  "fields": {
+    "title": "access_rule"
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 1,
+  "fields": {
+    "role": 4,
+    "resource": 1,
+    "create_permission": false,
+    "delete_permission": false,
+    "delete_all_permission": false,
+    "update_permission": false,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 2,
+  "fields": {
+    "role": 4,
+    "resource": 3,
+    "create_permission": false,
+    "delete_permission": false,
+    "delete_all_permission": false,
+    "update_permission": false,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 3,
+  "fields": {
+    "role": 4,
+    "resource": 4,
+    "create_permission": false,
+    "delete_permission": false,
+    "delete_all_permission": false,
+    "update_permission": false,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 4,
+  "fields": {
+    "role": 3,
+    "resource": 1,
+    "create_permission": false,
+    "delete_permission": false,
+    "delete_all_permission": false,
+    "update_permission": false,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 5,
+  "fields": {
+    "role": 3,
+    "resource": 2,
+    "create_permission": true,
+    "delete_permission": true,
+    "delete_all_permission": true,
+    "update_permission": true,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": false
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 6,
+  "fields": {
+    "role": 3,
+    "resource": 4,
+    "create_permission": true,
+    "delete_permission": true,
+    "delete_all_permission": false,
+    "update_permission": true,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 7,
+  "fields": {
+    "role": 2,
+    "resource": 1,
+    "create_permission": true,
+    "delete_permission": false,
+    "delete_all_permission": false,
+    "update_permission": true,
+    "update_all_permission": true,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 8,
+  "fields": {
+    "role": 1,
+    "resource": 1,
+    "create_permission": true,
+    "delete_permission": true,
+    "delete_all_permission": true,
+    "update_permission": true,
+    "update_all_permission": true,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 9,
+  "fields": {
+    "role": 1,
+    "resource": 5,
+    "create_permission": true,
+    "delete_permission": true,
+    "delete_all_permission": true,
+    "update_permission": true,
+    "update_all_permission": true,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 10,
+  "fields": {
+    "role": 1,
+    "resource": 3,
+    "create_permission": true,
+    "delete_permission": true,
+    "delete_all_permission": true,
+    "update_permission": true,
+    "update_all_permission": true,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 11,
+  "fields": {
+    "role": 2,
+    "resource": 2,
+    "create_permission": false,
+    "delete_permission": false,
+    "delete_all_permission": false,
+    "update_permission": false,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 12,
+  "fields": {
+    "role": 2,
+    "resource": 4,
+    "create_permission": false,
+    "delete_permission": true,
+    "delete_all_permission": true,
+    "update_permission": false,
+    "update_all_permission": false,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+},
+{
+  "model": "access.accessrule",
+  "pk": 13,
+  "fields": {
+    "role": 1,
+    "resource": 2,
+    "create_permission": true,
+    "delete_permission": true,
+    "delete_all_permission": true,
+    "update_permission": true,
+    "update_all_permission": true,
+    "read_permission": true,
+    "read_all_permission": true
+  }
+}
+]
