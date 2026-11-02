@@ -1,7 +1,7 @@
 import jwt
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
+# from django.contrib.auth import get_user_model
+# from django.contrib.auth.models import AnonymousUser
 
 User = get_user_model()
 
@@ -29,7 +29,12 @@ class JWTAuthenticationMiddleware:
         if not auth_header or not auth_header.startswith('Bearer '):
             return None
 
-        token = auth_header.split(' ')[1]
+        parts = auth_header.split()
+        if len(parts) != 2:
+            return None
+
+
+        token = parts[1]
 
         try:
             payload = jwt.decode(
