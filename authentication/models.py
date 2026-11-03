@@ -1,5 +1,4 @@
 import bcrypt
-from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
 from access.models import Role
@@ -44,6 +43,8 @@ class User(models.Model):
     token_version = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    is_authenticated = True
+    is_anonymous = False
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -62,3 +63,9 @@ class User(models.Model):
             password.encode('utf-8'),
             self.password.encode('utf-8')
         )
+
+class Session(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    session_key_hash = models.CharField(max_length=MAX_LENGTH, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
