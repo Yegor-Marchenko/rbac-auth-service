@@ -46,6 +46,10 @@ class User(models.Model):
     is_authenticated = True
     is_anonymous = False
 
+    @property
+    def is_admin(self):
+        return getattr(self.role, 'title', None) == 'admin'
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

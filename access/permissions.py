@@ -31,7 +31,7 @@ class AccessRulePermission(permissions.BasePermission):
         if not request.user.is_authenticated:
             raise NotAuthenticatedError()
 
-        if request.user.is_superuser:
+        if request.user.is_admin:
             return True
 
         action = self.method_to_action.get(request.method)
@@ -45,23 +45,29 @@ class AccessRulePermission(permissions.BasePermission):
         if action == 'read':
             return rule.read_permission or rule.read_all_permission
         flag_name = f'{action}_permission'
-        return getattr(rule, flag_name)
+        if action == 'create':
+            return getattr(rule, flag_name)
+        flag_name_all = f'{action}_all_permission'
+        return getattr(rule, flag_name) or getattr(rule, flag_name_all)
 
     def has_object_permission(self, request, view, obj):
 
-        if request.user.is_superuser:
+        if request.user.is_admin:
             return True
 
         action = self.method_to_action.get(request.method)
         if action is None:
             return False
 
-        if obj.owner == request.user.id:
-            return True
-
         rule = self.get_rule(request, view)
         if rule is None:
             return False
+
+        if (
+            obj.owner == request.user.id
+            and getattr(rule, f'{action}_permission')
+        ):
+            return True
 
         flag_name = f'{action}_all_permission'
         return getattr(rule, flag_name)
@@ -71,9 +77,7 @@ class IsAdminRole(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             raise NotAuthenticatedError()
-        if request.user.is_superuser:
-            return True
-        return request.user.role is not None and request.user.role.title == 'admin'
+        return request.user.is_admin
 
 
 class IsAuthenticatedCustom(permissions.BasePermission):
