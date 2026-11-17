@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     # 'django.contrib.messages',
     # 'django.contrib.staticfiles',
     'authentication.apps.AuthenticationConfig',
-    'access.apps.AccessConfig',
     'rest_framework',
 ]
 
@@ -50,7 +49,7 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'access.permissions.AccessRulePermission',
+        'authentication.permissions.AccessRulePermission',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'authentication.drf_auth.MiddlewareAuthentication',

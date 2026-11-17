@@ -1,10 +1,16 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from access.models import Role
+from authentication.models import AccessRule, Role
 from authentication.exceptions import InvalidCredentials
 
 User = get_user_model()
+
+
+class AccessRuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccessRule
+        fields = '__all__'
 
 
 class ProfileSerializer(serializers.ModelSerializer):

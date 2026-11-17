@@ -2,9 +2,9 @@ from django.db import migrations
 
 
 def seed_access_rules(apps, schema_editor):
-    Role = apps.get_model('access', 'Role')
-    Resource = apps.get_model('access', 'Resource')
-    AccessRule = apps.get_model('access', 'AccessRule')
+    Role = apps.get_model('authentication', 'Role')
+    Resource = apps.get_model('authentication', 'Resource')
+    AccessRule = apps.get_model('authentication', 'AccessRule')
 
     db_alias = schema_editor.connection.alias
 
@@ -42,7 +42,7 @@ def seed_access_rules(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('access', '0002_seed_roles'),
+        ('authentication', '0002_seed_roles'),
     ]
 
     operations = [

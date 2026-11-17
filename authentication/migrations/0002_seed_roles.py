@@ -3,7 +3,7 @@ from django.db import migrations
 
 
 def seed_roles(apps, schema_editor):
-    Role = apps.get_model('access', 'Role')
+    Role = apps.get_model('authentication', 'Role')
     db_alias = schema_editor.connection.alias
 
     for title in ('user', 'admin'):
@@ -13,7 +13,7 @@ def seed_roles(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('access', '0001_initial'),
+        ('authentication', '0001_initial'),
     ]
 
     operations = [
