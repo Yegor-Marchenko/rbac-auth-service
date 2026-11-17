@@ -1,13 +1,16 @@
+from django.db import transaction
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from access.permissions import IsAuthenticatedCustom
+from authentication.models import Session
 from authentication.serializers import (LoginSerializer, ProfileSerializer,
                                         RegistrationSerializer)
+from authentication.sessions import create_session
 from authentication.utils import create_jwt
-
+from django.conf import settings
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticatedCustom]
@@ -26,12 +29,15 @@ class ProfileView(APIView):
 
     def delete(self, request):
         user = request.user
-        user.is_active = False
-        user.token_version += 1
-        user.save(update_fields=['is_active', 'token_version'])
-        return Response({'detail': 'Аккаунт деактивирован'},
-                        status=status.HTTP_200_OK)
-
+        with transaction.atomic():
+            user.is_active = False
+            user.token_version += 1
+            user.save(update_fields=['is_active', 'token_version'])
+            Session.objects.filter(user=user).delete()
+        response = Response({'detail': 'Аккаунт деактивирован'},
+                            status=status.HTTP_200_OK)
+        response.delete_cookie(key='session_id')
+        return response
 
 class RegistrationView(APIView):
 
@@ -52,8 +58,18 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token = create_jwt(user)
-        return Response({'token': token})
+        token_jwt = create_jwt(user)
+        session_id = create_session(user)
+        response = Response({'token': token_jwt})
+        response.set_cookie(
+            key='session_id',
+            value=session_id,
+            max_age= 7* 24 * 60 * 60,
+            secure=not settings.DEBUG,
+            httponly=True,
+            samesite='Lax',
+        )
+        return response
 
 
 class LogoutView(APIView):
@@ -61,7 +77,12 @@ class LogoutView(APIView):
 
     def post(self, request):
         user = request.user
-        user.token_version += 1
-        user.save(update_fields=['token_version'])
-        return Response({'detail': 'Вы вышли из системы'},
-                        status=status.HTTP_200_OK)
+        with transaction.atomic():
+            user.token_version += 1
+            user.save(update_fields=['token_version'])
+            session = Session.objects.filter(user=user)
+            session.delete()
+        response = Response({'detail': 'Вы вышли из системы'},
+                            status=status.HTTP_200_OK)
+        response.delete_cookie(key='session_id')
+        return response

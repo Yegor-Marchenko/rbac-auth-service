@@ -42,7 +42,7 @@ class OrderListView(APIView):
             resource__title=self.resource_name,
         ).first()
 
-        if rule and rule.read_all_permission:
+        if request.user.is_admin or (rule and rule.read_all_permission):
             orders = FAKE_ORDERS
         else:
             orders = [o for o in FAKE_ORDERS if o.owner == request.user.id]
@@ -84,7 +84,7 @@ class ReviewListView(APIView):
             resource__title=self.resource_name,
         ).first()
 
-        if rule and rule.read_all_permission:
+        if request.user.is_admin or (rule and rule.read_all_permission):
             reviews = FAKE_REVIEWS
         else:
             reviews = [r for r in FAKE_REVIEWS if r.owner == request.user.id]

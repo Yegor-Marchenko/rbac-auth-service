@@ -55,6 +55,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'authentication.drf_auth.MiddlewareAuthentication',
     ],
+    'UNAUTHENTICATED_USER':
+        'authentication.anonymous.AnonymousUser',
+
 }
 
 ROOT_URLCONF = 'config.urls'

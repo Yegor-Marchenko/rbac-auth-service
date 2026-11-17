@@ -70,6 +70,6 @@ class User(models.Model):
 
 class Session(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session_key_hash = models.CharField(max_length=MAX_LENGTH, unique=True)
+    session_id_hash = models.CharField(max_length=MAX_LENGTH, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()

@@ -14,7 +14,7 @@ def create_session(user):
 
     Session.objects.create(
         user=user,
-        session_key_hash=hashed_token,
+        session_id_hash=hashed_token,
         expires_at=expires_at
     )
 

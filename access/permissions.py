@@ -23,8 +23,8 @@ class AccessRulePermission(permissions.BasePermission):
         if resource_name is None:
             return None
         return AccessRule.objects.filter(
-            role=request.user.role,
-            resource__title=resource_name,
+            role=request.user.role, # user, manager, admin
+            resource__title=resource_name, # order
         ).first()
 
     def has_permission(self, request, view):
@@ -62,6 +62,9 @@ class AccessRulePermission(permissions.BasePermission):
         rule = self.get_rule(request, view)
         if rule is None:
             return False
+
+        if action == 'create':
+            return getattr(rule, 'create_permission')
 
         if (
             obj.owner == request.user.id

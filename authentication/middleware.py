@@ -71,7 +71,7 @@ class SessionAuthenticationMiddleware:
             return AnonymousUser()
 
         hashed_token = hashlib.sha256(session_id.encode('utf-8')).hexdigest()
-        session = Session.objects.filter(session_key_hash=hashed_token).first()
+        session = Session.objects.filter(session_id_hash=hashed_token).first()
 
         if session is None or session.expires_at <= timezone.now():
             return AnonymousUser()
