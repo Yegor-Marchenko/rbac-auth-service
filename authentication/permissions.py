@@ -1,7 +1,5 @@
 from rest_framework import permissions
 
-from authentication.exceptions import NotAuthenticatedError
-
 from .models import AccessRule
 
 
@@ -29,7 +27,7 @@ class AccessRulePermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
-            raise NotAuthenticatedError()
+            return False
 
         if request.user.is_admin:
             return True
@@ -79,12 +77,8 @@ class AccessRulePermission(permissions.BasePermission):
 class IsAdminRole(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
-            raise NotAuthenticatedError()
-        return request.user.is_admin
-
-
-class IsAuthenticatedCustom(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if not request.user.is_authenticated:
-            raise NotAuthenticatedError()
-        return True
+            return False
+        if request.user.is_admin:
+            return True
+        else:
+            return False

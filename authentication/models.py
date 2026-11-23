@@ -1,5 +1,5 @@
 import bcrypt
-from django.db import models
+from django.db import models, transaction
 
 from config.constants import MAX_LENGTH
 
@@ -100,6 +100,19 @@ class User(models.Model):
             password.encode('utf-8'),
             self.password.encode('utf-8')
         )
+
+    def revoke_access(self):
+        with transaction.atomic():
+            self.token_version += 1
+            self.save(update_fields=['token_version'])
+            Session.objects.filter(user=self).delete()
+
+    def deactivate(self):
+        with transaction.atomic():
+            self.is_active = False
+            self.save(update_fields=['is_active'])
+            self.revoke_access()
+
 
 class Session(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

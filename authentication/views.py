@@ -1,14 +1,13 @@
-from django.db import transaction
 from rest_framework import status
 from rest_framework.exceptions import NotFound
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import (ListCreateAPIView,
                                      RetrieveUpdateDestroyAPIView)
 
-from authentication.permissions import IsAuthenticatedCustom, IsAdminRole
-from authentication.models import Session, AccessRule
+from authentication.permissions import IsAdminRole
+from authentication.models import AccessRule
 from authentication.serializers import (LoginSerializer, ProfileSerializer,
                                         RegistrationSerializer,
                                         AccessRuleSerializer)
@@ -18,7 +17,7 @@ from django.conf import settings
 
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticatedCustom]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         serializer = ProfileSerializer(request.user)
@@ -34,15 +33,13 @@ class ProfileView(APIView):
 
     def delete(self, request):
         user = request.user
-        with transaction.atomic():
-            user.is_active = False
-            user.token_version += 1
-            user.save(update_fields=['is_active', 'token_version'])
-            Session.objects.filter(user=user).delete()
+        user.deactivate()
+
         response = Response({'detail': 'Аккаунт деактивирован'},
                             status=status.HTTP_200_OK)
         response.delete_cookie(key='session_id')
         return response
+
 
 class RegistrationView(APIView):
 
@@ -78,20 +75,15 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticatedCustom]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
-        with transaction.atomic():
-            user.token_version += 1
-            user.save(update_fields=['token_version'])
-            session = Session.objects.filter(user=user)
-            session.delete()
+        user.revoke_access()
         response = Response({'detail': 'Вы вышли из системы'},
                             status=status.HTTP_200_OK)
         response.delete_cookie(key='session_id')
         return response
-
 
 
 class AccessRuleListView(ListCreateAPIView):
@@ -155,7 +147,7 @@ class OrderDetailView(APIView):
 
 
 FAKE_REVIEWS = [
-    MockObject(id=1, owner=2),
+    MockObject(id=1, owner=1),
     MockObject(id=2, owner=99),
 ]
 

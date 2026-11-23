@@ -44,9 +44,12 @@ class JWTAuthenticationMiddleware:
         except jwt.PyJWTError:
             return AnonymousUser()
 
-        user = User.objects.filter(id=payload.get('user_id')).first()
+        try:
+            user = User.objects.get(id=payload.get('user_id'))
+        except User.DoesNotExist:
+            return AnonymousUser()
 
-        if user is None or not user.is_active:
+        if not user.is_active:
             return AnonymousUser()
 
         if payload.get('token_version') != user.token_version:

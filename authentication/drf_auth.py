@@ -14,3 +14,6 @@ class MiddlewareAuthentication(BaseAuthentication):
         if user is None or not user.is_authenticated:
             return None
         return (user, None)
+
+    def authenticate_header(self, request):
+        return 'Bearer'
